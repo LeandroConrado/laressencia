@@ -1,0 +1,134 @@
+{% extends 'site/themes/default/layout.twig' %}
+
+{% block title %}Seu Carrinho | Laressência{% endblock %}
+
+{% block content %}
+<section class="carrinho-container">
+  <h1>🛒 Seu Carrinho</h1>
+
+  {% if produtos|length > 0 %}
+
+    {% for produto in produtos %}
+    <div class="carrinho-item">
+      {% if produto.tipo_midia == 'imagem' %}
+        <img src="{{ asset('/uploads/produtos/' ~ produto.midia) }}" alt="{{ produto.nome }}" class="imagem-carrinho">
+      {% elseif produto.tipo_midia == 'video' %}
+        <video src="{{ asset('/uploads/produtos/' ~ produto.midia) }}" muted autoplay loop></video>
+      {% endif %}
+
+      <div class="info-produto-carrinho">
+        <h2>{{ produto.nome }}</h2>
+
+        <form method="post" action="{{ url('/atualizar-carrinho/') }}" class="form-atualizar" style="margin-bottom: 10px;">
+          <div class="quantidade">
+            <label for="quantidade-{{ produto.id }}"><strong>quantidade:</strong></label>
+            <div class="qtd-wrapper">
+              <button type="button" onclick="alterarQtd({{ produto.id }}, -1)">−</button>
+              <span id="quantidadeTexto-{{ produto.id }}">{{ produto.quantidade }} unidade{{ produto.quantidade > 1 ? 's' }}</span>
+              <button type="button" onclick="alterarQtd({{ produto.id }}, 1)">+</button>
+              <input type="hidden" name="quantidades[{{ produto.id }}]" id="quantidade-{{ produto.id }}" value="{{ produto.quantidade }}" class="qtd-input" readonly>
+            </div>
+          </div>
+          <button type="submit" class="btn-atualizar" style="display: none;">Atualizar</button>
+        </form>
+
+        <p class="preco-item">Preço: R$ {{ produto.preco|number_format(2, ',', '.') }}</p>
+
+        <form method="get" action="{{ url('/remover-carrinho/' ~ produto.id) }}">
+          <button type="submit" class="btn-remover">🗑️ Remover</button>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+
+    <div class="frete-box">
+      <label for="cep">Calcular frete e prazo</label>
+      <div class="frete-inputs">
+        <input type="text" name="cep" id="cep" placeholder="Digite seu CEP">
+        <button type="button" id="btn-calcular-frete">ok</button>
+      </div>
+    </div>
+
+    <div id="freteInfo" class="frete-detalhe-box" style="display:none;"></div>
+
+    <div class="resumo-carrinho">
+      <h3>Resumo do Pedido</h3>
+      <p><strong>Subtotal:</strong> R$ <span id="subtotal">00,00</span></p>
+      <p><strong>Frete:</strong> R$ <span id="frete-valor">00,00</span></p>
+      <p><strong>Total:</strong> R$ <span id="total-final">00,00</span></p>
+      <input type="hidden" name="frete_selecionado" id="frete_selecionado">
+      <a href="{{ url('/checkout') }}" class="botao-finalizar" id="btn-checkout">⚡Continuar para o Checkout</a>
+    </div>
+
+  {% else %}
+    <p>Seu carrinho está vazio 😕</p>
+  {% endif %}
+</section>
+
+<script src="{{ asset('/assets/site/js/frete.js') }}"></script>
+<script>
+let valorFreteSelecionado = 0;
+
+function atualizarTextoQuantidade(id, qtd) {
+  const texto = document.getElementById("quantidadeTexto-" + id);
+  if (texto) {
+    texto.innerText = qtd + " unidade" + (qtd > 1 ? "s" : "");
+  }
+}
+
+async function alterarQtd(id, delta) {
+  const input = document.getElementById('quantidade-' + id);
+  let val = parseInt(input.value, 10);
+  val = isNaN(val) ? 1 : val;
+  val = Math.max(1, val + delta);
+  input.value = val;
+  atualizarTextoQuantidade(id, val);
+  atualizarTotais();
+}
+
+function atualizarTotais() {
+  let subtotal = 0;
+  document.querySelectorAll('.preco-item').forEach(item => {
+    const preco = parseFloat(item.innerText.replace('Preço: R$ ', '').replace('.', '').replace(',', '.'));
+    const quantidade = parseInt(item.closest('.info-produto-carrinho').querySelector('input[name^="quantidades"]').value);
+    subtotal += preco * quantidade;
+  });
+
+  document.getElementById('subtotal').innerText = subtotal.toFixed(2).replace('.', ',');
+  document.getElementById('frete-valor').innerText = valorFreteSelecionado.toFixed(2).replace('.', ',');
+  document.getElementById('total-final').innerText = (subtotal + valorFreteSelecionado).toFixed(2).replace('.', ',');
+}
+
+async function calcularFreteCarrinho() {
+  const cep = document.getElementById('cep').value.replace(/\D/g, '');
+  if (cep.length !== 8) {
+    alert('Digite um CEP válido.');
+    return;
+  }
+
+  const produtoId = document.querySelector('[id^="quantidade-"]').name.match(/\d+/)[0];
+  const quantidade = parseInt(document.querySelector('[id^="quantidade-"]').value);
+
+  if (!window.Frete || !Frete.calcular) {
+    console.error('Frete.calcular não está definido!');
+    return;
+  }
+
+  await Frete.calcular(produtoId, quantidade, cep);
+}
+
+document.getElementById('btn-checkout').addEventListener('click', async function(e) {
+  e.preventDefault();
+  const inputs = document.querySelectorAll('.qtd-input');
+  for (const input of inputs) {
+    const id = input.id.replace('quantidade-', '');
+    await alterarQtd(id, 0);
+  }
+  window.location.href = this.href;
+});
+
+document.getElementById('btn-calcular-frete')?.addEventListener('click', calcularFreteCarrinho);
+
+window.onload = atualizarTotais;
+</script>
+{% endblock %}

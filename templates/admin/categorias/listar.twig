@@ -1,0 +1,57 @@
+{% extends 'admin/layout/base.twig' %}
+
+{% block title %}Categorias - Laressência{% endblock %}
+
+{% block content %}
+<div class="container-box">
+  <div class="header-flex">
+    <h1>📂 Categorias</h1>
+    <a href="index.php?url=categorias/novo" class="btn btn-primary">➕ Nova Categoria</a>
+  </div>
+
+  <div class="tabela-container">
+    <table class="tabela-listagem">
+      <thead>
+        <tr>
+          <th>Imagem</th>
+          <th>Nome</th>
+          <th>Destaque</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for categoria in categorias %}
+        <tr>
+          <td style="width: 100px;">
+            {% if categoria.imagem %}
+              <img src="/laressencia/public/{{ categoria.imagem }}" alt="{{ categoria.nome }}" style="width: 100px; height: 60px; object-fit: cover; border-radius: 8px;">
+            {% else %}
+              <div style="width: 60px; height: 60px; background: #eee; border-radius: 8px; display: flex; align-items: center; justify-content: center;">📁</div>
+            {% endif %}
+          </td>
+
+          <td>{{ categoria.nome }}</td>
+
+          <td>
+            {% if categoria.destaque %}
+              <span class="badge success">Sim</span>
+            {% else %}
+              <span class="badge error">Não</span>
+            {% endif %}
+          </td>
+
+          <td>
+            <a href="index.php?url=categorias/editar&id={{ categoria.id }}" class="btn-acao editar">✏️</a>
+            <a href="index.php?url=categorias/excluir&id={{ categoria.id }}" class="btn-acao excluir" onclick="return confirm('Deseja realmente excluir esta categoria?')">🗑️</a>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="4" style="text-align: center;">Nenhuma categoria cadastrada.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,6 @@
+<div class="card-categoria">
+    <a href="{{ url('categoria/' ~ categoria.id) }}">
+        <img src="{{ asset(categoria.imagem) }}" alt="{{ categoria.nome }}" class="imagem-categoria">
+        <span class="nome-categoria">{{ categoria.nome }}</span>
+    </a>
+</div>

@@ -1,0 +1,32 @@
+{% extends 'site/themes/default/layout.twig' %}
+
+{% block content %}
+<section class="container-box">
+  <h1 class="titulo mb-4">Dúvidas Frequentes</h1>
+
+  <div class="faq-list">
+    {% for item in [
+      {'pergunta': 'Quais são os tipos de fragrâncias disponíveis?', 'resposta': 'Oferecemos fragrâncias florais, amadeiradas, cítricas e exclusivas criadas por nossa marca.'},
+      {'pergunta': 'A colônia de ambiente pode ser usada em roupas?', 'resposta': 'Sim! Nossas fórmulas são seguras para tecidos como cortinas, sofás e roupas de cama.'},
+      {'pergunta': 'Os produtos são testados em animais?', 'resposta': 'Jamais! Nossos produtos são cruelty-free e veganos.'},
+      {'pergunta': 'Qual o prazo de entrega?', 'resposta': 'Varia de 2 a 8 dias úteis, dependendo da sua localização.'},
+      {'pergunta': 'Como posso rastrear meu pedido?', 'resposta': 'Após a postagem, enviamos o código de rastreamento por e-mail e WhatsApp.'},
+      {'pergunta': 'Posso devolver um produto?', 'resposta': 'Sim, você pode solicitar devolução em até 7 dias após o recebimento.'},
+      {'pergunta': 'O que fazer se o frasco vazar?', 'resposta': 'Entre em contato com nosso suporte e enviaremos um novo produto.'},
+      {'pergunta': 'Vocês têm loja física?', 'resposta': 'Atualmente operamos apenas online com retirada local em Manhuaçu/MG.'},
+      {'pergunta': 'O perfume é forte?', 'resposta': 'Trabalhamos com concentração equilibrada: marcante, mas não invasiva.'},
+      {'pergunta': 'Aceitam quais formas de pagamento?', 'resposta': 'Aceitamos Pix, Boleto, Cartões Visa, MasterCard, Elo e Amex.'}
+    ] %}
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          {{ item.pergunta }}
+          <i data-lucide="chevron-down"></i>
+        </button>
+        <div class="faq-answer">
+          <p>{{ item.resposta }}</p>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

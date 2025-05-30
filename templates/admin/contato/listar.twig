@@ -1,0 +1,37 @@
+{% extends 'admin/layout/base.twig' %}
+
+{% block conteudo %}
+<h1>📬 Mensagens de Contato</h1>
+
+{% if mensagens is empty %}
+  <p>Nenhuma mensagem encontrada.</p>
+{% else %}
+  <table class="tabela-padrao">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>E-mail</th>
+        <th>Assunto</th>
+        <th>Data</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for msg in mensagens %}
+      <tr>
+        <td>{{ msg.id }}</td>
+        <td>{{ msg.nome }}</td>
+        <td>{{ msg.email }}</td>
+        <td>{{ msg.assunto }}</td>
+        <td>{{ msg.data_envio|date("d/m/Y H:i") }}</td>
+        <td>
+          <a href="{{ base_url() }}/admin/contato/visualizar/{{ msg.id }}" class="btn">👁 Ver</a>
+          <a href="{{ base_url() }}/admin/contato/excluir/{{ msg.id }}" class="btn btn-danger" onclick="return confirm('Tem certeza?')">🗑 Excluir</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endif %}
+{% endblock %}

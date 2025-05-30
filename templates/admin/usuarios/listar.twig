@@ -1,0 +1,51 @@
+
+
+
+{% extends 'admin/layout/base.twig' %}
+
+{% block title %}👤 Usuários - Laressência{% endblock %}
+
+{% block content %}
+<h1>👤 Usuários</h1>
+
+<a href="index.php?url=usuarios/novo" class="btn btn-primary">Novo Usuário</a>
+
+<div class="table-responsive">
+  <table>
+    <thead>
+      <tr>
+        <th>Foto</th>
+        <th>Nome</th>
+        <th>Email</th>
+        <th>Ativo</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for usuario in usuarios %}
+      <tr>
+        <td>
+          {% if usuario.foto %}
+            <img src="/laressencia/public/{{ usuario.foto }}" width="40" class="avatar-img" style="border-radius: 50%;">
+
+          {% else %}
+            —
+          {% endif %}
+        </td>
+        <td>{{ usuario.nome }}</td>
+        <td>{{ usuario.email }}</td>
+        <td>{{ usuario.ativo ? 'Sim' : 'Não' }}</td>
+        <td>
+          <a href="index.php?url=usuarios/editar&id={{ usuario.id }}">Editar</a> |
+          <a href="index.php?url=usuarios/excluir&id={{ usuario.id }}" onclick="return confirm('Deseja excluir este usuário?')">Excluir</a>
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="5">Nenhum usuário encontrado.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'admin/layout/base.twig' %}
+
+{% block title %}Nova Categoria - Laressência{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1>➕ Nova Categoria</h1>
+
+  <form action="index.php?url=categorias/salvar" method="post" enctype="multipart/form-data" class="form">
+
+    <div class="form-group">
+      <label for="nome">Nome da Categoria:</label>
+      <input type="text" name="nome" id="nome" required>
+    </div>
+
+    <div class="form-group">
+      <label for="imagem">Imagem da Categoria:</label>
+      <input type="file" name="imagem" id="imagem" accept="image/*">
+    </div>
+
+    <div class="form-group">
+      <label class="checkbox-label">
+        <input type="checkbox" name="destaque" value="1">
+        Exibir como destaque
+      </label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Salvar</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends 'admin/layout/base.twig' %}
+
+{% block title %}📄 Pedido #{{ pedido.numero }}{% endblock %}
+
+{% block content %}
+<h1>📄 Pedido #{{ pedido.numero }}</h1>
+
+<div class="form-box">
+  <p><strong>Cliente:</strong> {{ pedido.nome_cliente }}</p>
+  <p><strong>Telefone:</strong> {{ pedido.telefone }}</p>
+  <p><strong>Endereço:</strong> {{ pedido.rua }}, {{ pedido.numero }} - {{ pedido.bairro }}</p>
+  <p><strong>Cidade/UF:</strong> {{ pedido.cidade }}/{{ pedido.estado }}</p>
+  <p><strong>CEP:</strong> {{ pedido.cep }}</p>
+  <p><strong>Data:</strong> {{ pedido.criado_em|date("d/m/Y H:i") }}</p>
+
+  <form action="index.php?url=pedidos/atualizar-status&id={{ pedido.id }}" method="POST">
+    <div class="form-group">
+      <label for="status">Status:</label>
+      <select name="status" id="status">
+        <option value="Pendente" {{ pedido.status == 'Pendente' ? 'selected' }}>Pendente</option>
+        <option value="Pago" {{ pedido.status == 'Pago' ? 'selected' }}>Pago</option>
+        <option value="Enviado" {{ pedido.status == 'Enviado' ? 'selected' }}>Enviado</option>
+        <option value="Cancelado" {{ pedido.status == 'Cancelado' ? 'selected' }}>Cancelado</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="pagamento">Forma de Pagamento:</label>
+      <select name="pagamento" id="pagamento">
+        <option value="Pix" {{ pedido.pagamento == 'Pix' ? 'selected' }}>Pix</option>
+        <option value="Cartão" {{ pedido.pagamento == 'Cartão' ? 'selected' }}>Cartão</option>
+        <option value="Dinheiro" {{ pedido.pagamento == 'Dinheiro' ? 'selected' }}>Dinheiro</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="observacoes">Observações:</label>
+      <textarea name="observacoes" id="observacoes" rows="3">{{ pedido.observacoes }}</textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+    
+  </form>
+
+  <hr>
+  <p><strong>Total:</strong> R$ {{ pedido.total|number_format(2, ',', '.') }}</p>
+
+  <h2>Itens do Pedido</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Produto</th>
+        <th>Quantidade</th>
+        <th>Preço Unitário</th>
+        <th>Subtotal</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in itens %}
+        <tr>
+          <td>{{ item.nome_produto }}</td>
+          <td>{{ item.quantidade }}</td>
+          <td>R$ {{ item.preco_unitario|number_format(2, ',', '.') }}</td>
+          <td>R$ {{ (item.quantidade * item.preco_unitario)|number_format(2, ',', '.') }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <br>
+  <a href="https://wa.me/SEU_NUMERO?text=Resumo%20do%20pedido%20{{ pedido.numero }}%3A%20Cliente%20{{ pedido.nome_cliente }}%2C%20Total%3A%20R%24%20{{ pedido.total|number_format(2, ',', '.') }}" target="_blank" class="btn btn-primary">📲 Enviar para WhatsApp</a>
+  <a href="index.php?url=pedidos/imprimir&id={{ pedido.id }}" target="_blank" class="btn btn-secondary">🖨️ Imprimir PDF</a>
+
+  <br><br>
+  <a href="index.php?url=pedidos/listar" class="link-voltar">← Voltar para lista</a>
+</div>
+{% endblock %}

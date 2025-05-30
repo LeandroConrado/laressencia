@@ -1,0 +1,101 @@
+{% extends 'site/themes/default/layout.twig' %}
+
+{% block title %}Finalizar Pedido | Laressência{% endblock %}
+
+{% block content %}
+<section class="checkout-container">
+  {% if session.error is defined and session.error is not null %}
+    <div class="error-message">{{ session.error }}</div>
+    {% set session = session|merge({'error': null}) %}
+  {% endif %}
+
+  <h1>🍎 Finalizar Pedido</h1>
+
+  <form method="post" action="{{ url('/finalizar-pedido') }}" id="checkoutForm">
+    <input type="hidden" name="frete_selecionado" id="frete_selecionado" value="{{ frete_selecionado|default('') }}">
+
+    <div class="checkout-box">
+      <h2>🧳 Dados do Cliente</h2>
+
+      <label>E-mail: <span class="required">*</span>
+        <input type="email" name="email" id="email" required>
+      </label>
+
+      <div id="dados-cadastro" style="display: none;">
+        <label>Nome: <span class="required">*</span>
+          <input type="text" name="nome" id="nome">
+        </label>
+
+        <label>CPF: <span class="required">*</span>
+          <input type="text" name="cpf" id="cpf" placeholder="000.000.000-00">
+        </label>
+
+        <label>Telefone: <span class="required">*</span>
+          <input type="text" name="telefone" id="telefone" placeholder="(00) 00000-0000">
+        </label>
+
+        <h2>🏠 Endereço de Entrega</h2>
+
+        <label>CEP: <span class="required">*</span>
+          <div style="display: flex; gap: 10px;">
+            <input type="text" name="cep" id="cep" placeholder="00000-000" style="flex:1">
+            <button type="button" class="botao-azul" onclick="buscarEndereco()">Buscar</button>
+          </div>
+        </label>
+
+        <label>Rua: <span class="required">*</span>
+          <input type="text" name="rua" id="rua">
+        </label>
+
+        <label>Número: <span class="required">*</span>
+          <input type="text" name="numero" id="numero">
+        </label>
+
+        <label>Bairro: <span class="required">*</span>
+          <input type="text" name="bairro" id="bairro">
+        </label>
+
+        <label>Cidade: <span class="required">*</span>
+          <input type="text" name="cidade" id="cidade">
+        </label>
+
+        <label>Estado: <span class="required">*</span>
+          <input type="text" name="estado" id="estado">
+        </label>
+      </div>
+    </div>
+
+    <div class="checkout-box">
+      <h2>💳 Forma de Pagamento</h2>
+      <select name="forma_pagamento" required>
+        <option value="">Selecione uma forma de pagamento</option>
+        <option value="Pix">Pix</option>
+        <option value="Cartão de Crédito">Cartão de Crédito</option>
+        <option value="Boleto">Boleto</option>
+      </select>
+    </div>
+
+    <div class="checkout-box">
+      <h2>🛍️ Itens do Pedido</h2>
+      <ul>
+        {% for item in produtos %}
+          <li>🧴 {{ item.nome }} (x{{ item.quantidade }}) — R$ {{ (item.preco * item.quantidade)|number_format(2, ',', '.') }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="checkout-box">
+      <h2>🚚 Calcular Frete</h2>
+      <label>CEP para entrega: <span class="required">*</span>
+        <div style="display: flex; gap: 10px;">
+          <input type="text" id="cep-frete" name="cep_frete" placeholder="00000-000" maxlength="9" required style="flex:1">
+          <button type="button" id="btn-calcular-frete" class="botao-azul" onclick="Frete.calcularCheckout()">Calcular</button>
+        </div>
+      </label>
+      <div id="frete-opcoes" class="frete-opcoes"></div>
+    </div>
+
+    <div class="checkout-box">
+      <h2>🏦 Resumo do Pedido</h2>
+      <div class="resumo-valores">
+        <p><strong>Subtotal:</strong> <span id="subtotalValor" data-valor="{{ subtotal }}">R$ {{ subtotal|number_format(2, ",", ".") }}</span>

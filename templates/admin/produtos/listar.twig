@@ -1,0 +1,61 @@
+{% extends 'admin/layout/base.twig' %}
+
+{% block title %}Produtos - Laressência{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1>📦 Produtos</h1>
+
+  <a href="{{ base_url }}/admin/produto/novo/" class="btn btn-primary">Novo Produto</a>
+
+
+<div class="table-responsive">
+  <table>
+    <thead>
+      <tr>
+        <th>Mídia</th>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Descrição</th>
+        <th>Preço</th>
+        <th>Estoque</th>
+        <th>Categoria</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for produto in produtos %}
+      <tr>
+        <td>
+          {% if produto.tipo_midia == 'imagem' %}
+            <img src="/laressencia/public/uploads/produtos/{{ produto.midia }}" alt="Imagem" width="60" style="border-radius: 8px;">
+          {% elseif produto.tipo_midia == 'video' %}
+            <video width="80" controls style="border-radius: 8px;">
+              <source src="/laressencia/public/uploads/produtos/{{ produto.midia }}">
+            </video>
+          {% else %}
+            <span>—</span>
+          {% endif %}
+        </td>
+        <td>{{ produto.id }}</td>
+        <td>{{ produto.nome }}</td>
+        <td>{{ produto.descricao|slice(0, 50) ~ '...' }}</td>
+        <td>R$ {{ produto.preco|number_format(2, ',', '.') }}</td>
+        <td>{{ produto.estoque }}</td>
+        <td>{{ produto.nome_categoria ?? '—' }}</td>
+        <td>
+          <a href="{{ base_url }}/admin/produto/editar/{{ produto.id }}">Editar</a> |
+          <a href="{{ base_url }}/admin/produto/excluir/{{ produto.id }}" onclick="return confirm('Tem certeza que deseja excluir?')">Excluir</a>
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="8">Nenhum produto cadastrado.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+{% endblock %}
+

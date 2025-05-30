@@ -1,0 +1,251 @@
+{% extends 'site/themes/default/layout.twig' %}
+
+{% block title %}Pedido Confirmado | Laressência{% endblock %}
+
+{% block content %}
+
+<section class="confirmacao-container" id="pedido-resumo">
+  <h1>✅ Pedido Realizado com Sucesso!</h1>
+
+  <p><strong>Número do Pedido:</strong> {{ pedido.numero }}</p>
+  <p><strong>Data:</strong> {{ pedido.criado_em|date('d/m/Y H:i') }}</p>
+
+  <hr>
+
+  <h2>Dados do Cliente:</h2>
+  <p><strong>Nome:</strong> {{ pedido.nome_cliente }}</p>
+  <p><strong>E-mail:</strong> {{ pedido.email }}</p>
+  <p><strong>CPF:</strong> {{ pedido.cpf }}</p>
+  <p><strong>Telefone:</strong> {{ pedido.telefone }}</p>
+
+  <h2>Endereço de Entrega:</h2>
+  <p>{{ pedido.rua }}, {{ pedido.numero_endereco }} - {{ pedido.bairro }}</p>
+  <p>{{ pedido.cidade }}/{{ pedido.estado }} - CEP: {{ pedido.cep }}</p>
+
+  {% if pedido.frete_valor %}
+    <p><strong>Frete:</strong> R$ {{ pedido.frete_valor|number_format(2, ',', '.') }}</p>
+    <p><strong>Tipo de Entrega:</strong> {{ pedido.frete_tipo }}</p>
+  {% endif %}
+
+  <p><strong>Forma de Pagamento:</strong> {{ pedido.forma_pagamento }}</p>
+  <p><strong>Status:</strong> {{ pedido.status }}</p>
+
+  <hr>
+
+    <h2>Itens do Pedido:</h2>
+  <div class="itens-pedido">
+    {% for item in pedido.itens %}
+      <div class="item-pedido">
+        <div class="item-detalhe">
+          <span class="label">Produto ID:</span>
+          <span class="valor">#{{ item.produto_id }}</span>
+        </div>
+        <div class="item-detalhe">
+          <span class="label">Quantidade:</span>
+          <span class="valor">{{ item.quantidade }}</span>
+        </div>
+        <div class="item-detalhe">
+          <span class="label">Preço Unitário:</span>
+          <span class="valor">R$ {{ item.preco_unitario|number_format(2, ',', '.') }}</span>
+        </div>
+        <div class="item-detalhe">
+          <span class="label">Subtotal:</span>
+          <span class="valor">R$ {{ (item.preco_unitario * item.quantidade)|number_format(2, ',', '.') }}</span>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+
+  <p class="total-pedido"><strong>Total:</strong> R$ {{ pedido.total|number_format(2, ',', '.') }}</p>
+
+  <hr>
+
+  <div class="acoes-pedido">
+    <a href="{{ url('/baixar-pdf/' ~ pedido.numero) }}" class="btn btn-outline-primary">
+      📥 Baixar PDF
+    </a>
+    <a href="https://api.whatsapp.com/send?phone={{ config.whatsapp }}&text={{ resumo_whatsapp }}" 
+       class="btn-whatsapp" 
+       target="_blank">
+      📲 Enviar Resumo para o WhatsApp
+    </a>
+  </div>
+
+  <a href="{{ url}}" class="btn-voltar">← Voltar para a Home</a>
+</section>
+
+<script>
+  function baixarPDF() {
+    const el = document.getElementById('pedido-resumo');
+    const opt = {
+      margin:       0.5,
+      filename:     'pedido-{{ pedido.numero }}.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2 },
+      jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+    };
+    html2pdf().set(opt).from(el).save();
+  }
+</script>
+
+<!-- CDN html2pdf -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<style>
+.confirmacao-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px;
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.confirmacao-container h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+  padding: 20px;
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.confirmacao-container h2 {
+  font-size: 18px;
+  margin: 20px 0 10px;
+  color: #333;
+  padding: 20px;
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.confirmacao-container p {
+  margin: 5px 0;
+  color: #333;
+}
+
+.confirmacao-container strong {
+  color: #555;
+}
+
+.itens-pedido {
+  margin: 10px 0;
+}
+
+.item-pedido {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  border-left: 4px solid #007bff; /* Adicionado para destacar cada item */
+}
+
+.item-detalhe {
+  display: flex;
+  justify-content: space-between;
+  margin: 5px 0;
+  color: #333;
+}
+
+.item-detalhe .label {
+  font-weight: bold;
+  color: #555;
+  min-width: 120px; /* Garante que o label tenha largura mínima */
+}
+
+.item-detalhe .valor {
+  color: #333;
+  text-align: right;
+}
+
+@media (max-width: 600px) {
+  .item-detalhe {
+    flex-direction: column;
+    gap: 5px;
+    text-align: left;
+  }
+
+  .item-detalhe .label {
+    font-size: 14px;
+  }
+
+  .item-detalhe .valor {
+    font-size: 14px;
+  }
+
+  .item-pedido {
+    border-left: none; /* Remove borda lateral em telas pequenas */
+    padding: 10px;
+  }
+}
+
+.total-pedido {
+  font-size: 18px;
+  margin-top: 20px;
+  font-weight: bold;
+  color: #333;
+}
+
+.acoes-pedido {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn-outline-primary {
+  background: #25D366;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+
+.btn-outline-primary:hover {
+  background: #1ebd57;
+}
+
+.btn-whatsapp {
+  background: #25D366;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+
+.btn-whatsapp:hover {
+  background: #1ebd57;
+}
+
+.btn-voltar {
+  display: inline-block;
+  background: #007bff;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: bold;
+  margin-top: 20px;
+  transition: background 0.2s;
+}
+
+.btn-voltar:hover {
+  background: #0056b3;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid #ddd;
+  margin: 20px 0;
+}
+</style>
+
+{% endblock %}

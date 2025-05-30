@@ -1,0 +1,33 @@
+{% extends 'admin/layout/base.twig' %}
+
+{% block title %}📢 Publicidades{% endblock %}
+
+{% block content %}
+<h1 class="titulo-pagina"><i class="lucide lucide-badge-percent"></i> Publicidades Cadastradas</h1>
+
+<a href="index.php?url=publicidade/novo" class="button mb-4"><i class="lucide lucide-plus"></i> Nova Publicidade</a>
+
+<div class="publicidade-grid">
+  {% for p in publicidades %}
+    <div class="card-publicidade">
+      {% if p.imagem %}
+        <img src="/laressencia/public/uploads/publicidade/{{ p.imagem }}" alt="Imagem Publicidade" style="max-width: 250px; border-radius: 10px; margin: 1rem 0;">
+      {% else %}
+        <div style="width: 250px; height: 150px; background: #eee; display: flex; align-items: center; justify-content: center; border-radius: 10px;">
+          <span style="color: #666;">Sem imagem</span>
+        </div>
+      {% endif %}
+      <h3><strong>{{ p.titulo }}</strong></h3>
+      <p><strong>Página:</strong> {{ p.pagina }}</p>
+      <p><strong>Link:</strong> <a href="{{ p.link }}" target="_blank">{{ p.link }}</a></p>
+      <p><strong>Status:</strong> {{ p.ativo ? 'Ativo' : 'Inativo' }}</p>
+      <div class="botoes">
+        <a href="index.php?url=publicidade/editar&id={{ p.id }}" class="btn btn-sm btn-warning">✏️ Editar</a>
+        <a href="index.php?url=publicidade/excluir&id={{ p.id }}" class="btn btn-sm btn-danger" onclick="return confirm('Deseja excluir esta publicidade?')">🗑️ Excluir</a>
+      </div>
+    </div>
+  {% else %}
+    <p><em>Nenhuma publicidade cadastrada ainda.</em></p>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'site/themes/default/layout.twig' %}
+
+{% block content %}
+<div class="container">
+  <h2>Categorias</h2>
+
+  <section class="categorias-home">
+  <div class="container">
+    <h2>Categorias</h2>
+    <div class="categorias-grid-ios">
+      {% for categoria in categorias %}
+        <a href="{{ url('/categoria/' ~ categoria.id) }}" class="categoria-card-ios">
+          <img src="{{asset ('/uploads/categorias/' ~ categoria.icone ?? 'padrao.png') }}" alt="{{ categoria.nome }}">
+          <span>{{ categoria.nome }}</span>
+        </a>
+      {% else %}
+        <p>😕 Ops... Página não encontrada
+        A categoria que você procurou não existe ou foi movida.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+</div>
+{% endblock %}

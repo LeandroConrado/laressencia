@@ -1,0 +1,77 @@
+<div class="produto-detalhe-container">
+  <div class="produto-detalhe-top">
+    <div class="imagem-produto-detalhe">
+      {% if produto.tipo_midia == 'imagem' %}
+        <img src="{{ asset('uploads/produtos/' ~ produto.midia) }}" alt="{{ produto.nome }}">
+      {% elseif produto.tipo_midia == 'video' %}
+        <video src="{{ asset('uploads/produtos/' ~ produto.midia) }}" controls autoplay muted loop playsinline></video>
+      {% endif %}
+    </div>
+
+    <div class="info-produto-detalhe">
+      <h1 class="titulo-produto">{{ produto.nome }}</h1>
+
+      <div class="preco-produto">
+        R$ {{ produto.preco|number_format(2, ',', '.') }}
+      </div>
+
+      <div class="frete-box">
+        <label for="cep">calcular frete e prazo</label>
+        <div class="frete-inputs">
+          <input type="text" name="cep" id="cep" placeholder="digite seu CEP">
+          <button type="button" onclick="Frete.calcular({{ produto.id }}, document.getElementById('quantidadeInput').value, document.getElementById('cep').value)">ok</button>
+        </div>
+      </div>
+
+      <div id="freteInfo" class="frete-detalhe-box" style="display:none;"></div>
+
+      <div class="quantidade-box">
+        <label>quantidade:</label>
+        <div class="quantidade-control">
+          <button type="button" onclick="alterarQuantidade(-1)">−</button>
+          <span id="quantidadeDisplay">1 unidade</span>
+          <button type="button" onclick="alterarQuantidade(1)">+</button>
+        </div>
+      </div>
+
+      <form method="post" action="{{ url('/adicionar-carrinho/' ~ produto.id) }}">
+        <input type="hidden" id="quantidadeInput" name="quantidade" value="1">
+        <button type="submit" class="btn-adicionar">🛒 Adicionar ao Carrinho</button>
+      </form>
+
+<form method="post" action="{{ url('/comprar-agora') }}">
+  <input type="hidden" name="id" value="{{ produto.id }}">
+  <input type="hidden" name="quantidade" value="1" id="quantidadeInput2">
+  <input type="hidden" name="frete" id="frete_selecionado" value="">
+  <button type="submit" class="btn-comprar">⚡ Comprar Agora</button>
+</form>
+
+
+    </div>
+  </div>
+
+  <div class="descricao-produto">
+    <h2>Informacões do Produto</h2>
+    <p>{{ produto.descricao|raw }}</p>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  let quantidade = 1;
+
+  window.alterarQuantidade = function (delta) {
+    quantidade = Math.max(1, quantidade + delta);
+
+    const display = document.getElementById("quantidadeDisplay");
+    const input1 = document.getElementById("quantidadeInput");
+    const input2 = document.getElementById("quantidadeInput2");
+
+    if (display) display.textContent = quantidade + " unidade" + (quantidade > 1 ? "s" : "");
+    if (input1) input1.value = quantidade;
+    if (input2) input2.value = quantidade;
+  };
+});
+</script>
+
+<script src="{{ asset('assets/site/js/frete.js') }}"></script>

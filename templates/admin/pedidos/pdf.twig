@@ -1,0 +1,41 @@
+{% extends "admin/layout/pdf_base.twig" %}
+
+{% block content %}
+<h1 style="text-align:center;">Pedido #{{ pedido.numero }}</h1>
+<hr>
+<p><strong>Cliente:</strong> {{ pedido.nome_cliente }}</p>
+<p><strong>Telefone:</strong> {{ pedido.telefone }}</p>
+<p><strong>Endereço:</strong> {{ pedido.rua }}, {{ pedido.numero }} - {{ pedido.bairro }}</p>
+<p><strong>Cidade/UF:</strong> {{ pedido.cidade }}/{{ pedido.estado }}</p>
+<p><strong>CEP:</strong> {{ pedido.cep }}</p>
+<p><strong>Data:</strong> {{ pedido.criado_em|date("d/m/Y H:i") }}</p>
+<p><strong>Status:</strong> {{ pedido.status }}</p>
+<p><strong>Pagamento:</strong> {{ pedido.pagamento }}</p>
+<p><strong>Observações:</strong> {{ pedido.observacoes }}</p>
+
+<hr>
+<h2>Itens do Pedido</h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="6">
+  <thead>
+    <tr style="background:#f0f0f0;">
+      <th>Produto</th>
+      <th>Quantidade</th>
+      <th>Preço Unitário</th>
+      <th>Subtotal</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in pedido.itens %}
+      <tr>
+        <td>{{ item.nome_produto }}</td>
+        <td>{{ item.quantidade }}</td>
+        <td>R$ {{ item.preco|number_format(2, ',', '.') }}</td>
+        <td>R$ {{ (item.quantidade * item.preco)|number_format(2, ',', '.') }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<hr>
+<h3 style="text-align:right;">Total: R$ {{ pedido.total|number_format(2, ',', '.') }}</h3>
+{% endblock %}

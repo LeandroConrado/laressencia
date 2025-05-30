@@ -1,0 +1,67 @@
+{% extends 'admin/layout/base.twig' %}
+
+{% block title %}Gerenciar Banners{% endblock %}
+
+{% block content %}
+<div class="container-box">
+  <div class="header-flex">
+    <h1>🖼️ Banners</h1>
+    <a href="index.php?url=banners/novo" class="btn btn-primary">➕ Novo Banner</a>
+  </div>
+
+  <div class="tabela-container">
+    <table class="tabela-listagem">
+      <thead>
+        <tr>
+          <th>Imagem</th>
+          <th>Título</th>
+          <th>Página</th>
+          <th>Ordem</th>
+          <th>Ativo</th>
+          <th>Validade</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for banner in banners %}
+          <tr>
+            <td style="width: 120px;">
+              {% if banner.tipo_midia == 'video' %}
+                <video src="/laressencia/public/uploads/banners/{{ banner.midia }}" muted autoplay loop style="height: 60px; border-radius: 8px;"></video>
+              {% else %}
+                <img src="/laressencia/public/uploads/banners/{{ banner.midia }}" alt="{{ publicidade.titulo }}" 
+       style="display: block; width: 120px; height: auto; border-radius: 10px; margin: 1rem 0; box-shadow: 0 0 8px rgba(0,0,0,0.1); background: #fff;">
+              {% endif %}
+            </td>
+            <td>{{ banner.titulo }}</td>
+            <td>{{ banner.pagina|capitalize }}</td>
+            <td>{{ banner.ordem }}</td>
+            <td>
+              {% if banner.ativo %}
+                <span class="badge success">Sim</span>
+              {% else %}
+                <span class="badge error">Não</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if banner.data_inicio and banner.data_fim %}
+                {{ banner.data_inicio|date('d/m/Y') }} até {{ banner.data_fim|date('d/m/Y') }}
+              {% else %}
+                Livre
+              {% endif %}
+            </td>
+            <td>
+              <a href="index.php?url=banners/editar&id={{ banner.id }}" class="btn-acao editar">✏️</a>
+              <a href="index.php?url=banners/excluir&id={{ banner.id }}" class="btn-acao excluir" onclick="return confirm('Tem certeza que deseja excluir este banner?')">🗑️</a>
+            </td>
+          </tr>
+        {% else %}
+          <tr>
+            <td colspan="7" style="text-align: center;">Nenhum banner encontrado.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

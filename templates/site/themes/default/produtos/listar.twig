@@ -1,0 +1,37 @@
+{% extends 'site/themes/default/layout.twig' %}
+
+{% block title %}Todos os Produtos | Laressência{% endblock %}
+
+{% block content %}
+
+<section class="destaques-section">
+  <h2 class="titulo-secao">todos ose produtos</h2>
+
+  <div class="destaques-grid">
+    {% for produto in produtos %}
+      <div class="card-produto">
+        <a href="{{ url('/produto/' ~ produto.id) }}">
+          <img src="{{ asset('/uploads/produtos/' ~ produto.midia) }}" alt="{{ produto.nome }}" class="imagem-produto">
+        </a>
+
+        <div class="info">
+          {% if produto.destaque %}
+            <span class="tag-destaque">❤️ queridinhos ❤️</span>
+          {% endif %}
+          <strong class="nome">{{ produto.nome }}</strong>
+          <span class="preco">R$ {{ produto.preco|number_format(2, ',', '.') }}</span>
+        </div>
+      </div>
+    {% else %}
+      <p>Nenhum produto encontrado.</p>
+    {% endfor %}
+  </div>
+
+  {% if paginacao is defined %}
+    <div class="paginacao">{{ paginacao|raw }}</div>
+  {% endif %}
+</section>
+
+{% endblock %}
+
+

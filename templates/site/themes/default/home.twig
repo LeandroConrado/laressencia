@@ -1,0 +1,47 @@
+{% extends 'site/themes/default/layout.twig' %}
+
+{% block title %}Home - Laressência{% endblock %}
+
+{% block content %}
+
+{# Slider de Banners #}
+{% include 'site/themes/default/componentes/banners_slider.twig' with { 'banners': banners } %}
+
+
+<section class="categorias-home">
+  <div class="container">
+    <h2>categorias em destaque</h2>
+    <div class="categorias-grid-ios">
+      {% for categoria in categorias %}
+         <a href="{{ url('/categoria' ~ categoria.id) }}" 
+          class="categoria-card-ios"
+          style="background-image: url('{{ asset }}/{{ categoria.imagem }}'); background-size: cover; background-position: center; border-radius: 20px; min-height: 160px; position: relative; overflow: hidden;">
+  
+          <div style="
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.73), transparent);
+            padding: 1rem;
+            text-align: center;">
+          
+          <span style="
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #fff;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.9);">
+            {{ categoria.nome }}
+          </span>
+        </div>
+      </a>
+
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{# Seções de produtos em destaque e categorias #}
+{% include 'site/themes/default/componentes/produtos_destaque.twig' %}
+
+
+{% endblock %}

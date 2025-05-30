@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - Laressência</title>
+</head>
+<body>
+  <form action="{{ base_url }}/admin/login/autenticar" method="POST" class="login-box">
+    <h2 style="text-align: center;">Bem-vindo à Laressência 💜</h2>
+
+    {% if erro %}
+      <div class="erro">{{ erro }}</div>
+    {% endif %}
+
+    <input type="email" name="email" placeholder="E-mail" required>
+    <input type="password" name="senha" placeholder="Senha" required>
+
+    <button type="submit">Entrar</button>
+
+    <div class="footer">
+      &copy; {{ "now"|date("Y") }} Laressência 💜
+    </div>
+  </form>
+
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .login-box {
+      background: white;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    input {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      background: #007aff;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+    }
+    .erro {
+      color: red;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: #888;
+    }
+  </style>
+
+</body>
+</html>

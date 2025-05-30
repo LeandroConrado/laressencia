@@ -1,0 +1,42 @@
+{% extends 'admin/layout/base.twig' %}
+
+{% block title %}📦 Pedidos - Laressência{% endblock %}
+
+{% block content %}
+<h1>📦 Pedidos</h1>
+<a href="index.php?url=pedidos/novo" class="btn btn-primary">Novo Pedido</a>
+
+<div class="tabela-box">
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Cliente</th>
+        <th>Data</th>
+        <th>Status</th>
+        <th>Total</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for pedido in pedidos %}
+      <tr>
+        <td>{{ pedido.id }}</td>
+        <td>{{ pedido.nome_cliente }}</td>
+        <td>{{ pedido.data|date('d/m/Y H:i') }}</td>
+        <td>{{ pedido.status }}</td>
+        <td>R$ {{ pedido.total|number_format(2, ',', '.') }}</td>
+        <td>
+          <a href="index.php?url=pedidos/visualizar&id={{ pedido.id }}">Visualizar</a> | 
+          <a href="index.php?url=pedidos/imprimir&id={{ pedido.id }}" target="_blank" class="btn btn-light">🖨️ PDF</a>
+
+          
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="6">Nenhum pedido encontrado.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

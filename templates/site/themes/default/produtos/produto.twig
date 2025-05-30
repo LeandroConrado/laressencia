@@ -1,0 +1,27 @@
+{% extends 'site/themes/default/layout.twig' %}
+
+{% block content %}
+<div class="container">
+  <h2>Todos os Produtos</h2>
+
+  <div class="produtos-grid">
+    {% for produto in produtos %}
+      <div class="produto-card">
+        {% if produto.midia ends with '.mp4' %}
+          <video src="{{ Asset('/uploads/' ~ produto.midia) }}" controls></video>
+        {% else %}
+          <img src="{{ Asset('/uploads/' ~ produto.midia) }}" alt="{{ produto.nome }}">
+        {% endif %}
+        <h3>{{ produto.nome }}</h3>
+        <div class="favorito">
+          <i class="lucide lucide-heart"></i>
+        </div>
+        <p class="product-price">R$ {{ produto.preco|number_format(2, ',', '.') }}</p>
+        <a href="{{ url('/produto/' ~ produto.id) }}" class="button">Ver mais</a>
+      </div>
+    {% else %}
+      <p>Nenhum produto encontrado.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

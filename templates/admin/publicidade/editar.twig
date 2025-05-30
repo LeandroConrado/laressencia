@@ -1,0 +1,52 @@
+{% extends 'admin/layout/base.twig' %}
+
+{% block title %}✏️ Editar Publicidade{% endblock %}
+
+{% block content %}
+<h1 class="titulo-pagina"><i class="lucide lucide-pencil"></i> ✏️ Editar Publicidade</h1>
+
+<form action="index.php?url=publicidade/atualizar&id={{ publicidade.id }}" method="POST" enctype="multipart/form-data" class="formulario">
+  <div class="form-group">
+    <label for="titulo">Título</label>
+    <input type="text" id="titulo" name="titulo" value="{{ publicidade.titulo }}" required>
+  </div>
+
+  <div class="form-group">
+    <label for="link">Link de Destino</label>
+    <input type="text" id="link" name="link" value="{{ publicidade.link }}">
+  </div>
+
+  <div class="form-group">
+    <label for="pagina">Página de Exibição</label>
+    <select id="pagina" name="pagina">
+      <option value="home" {% if publicidade.pagina == 'home' %}selected{% endif %}>Home</option>
+      <option value="produtos" {% if publicidade.pagina == 'produtos' %}selected{% endif %}>Produtos</option>
+      <option value="categorias" {% if publicidade.pagina == 'categorias' %}selected{% endif %}>Categorias</option>
+      <option value="sobre" {% if publicidade.pagina == 'sobre' %}selected{% endif %}>Sobre</option>
+      <option value="contato" {% if publicidade.pagina == 'contato' %}selected{% endif %}>Contato</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>Imagem Atual:</label>
+    {% if publicidade.imagem %}
+      <img src="/laressencia/public/uploads/publicidade/{{ publicidade.imagem }}" alt="Imagem Atual" style="max-width: 250px; border-radius: 10px; margin: 1rem 0;">
+    {% endif %}
+  </div>
+
+  <div class="form-group">
+    <label for="imagem">Nova Imagem (opcional)</label>
+    <input type="file" id="imagem" name="imagem" accept="image/*">
+    <input type="hidden" name="imagem_atual" value="{{ publicidade.imagem }}">
+  </div>
+
+  <div class="form-group switch-group">
+    <label for="ativo">Ativo</label>
+    <input type="checkbox" id="ativo" name="ativo" value="1" {% if publicidade.ativo %}checked{% endif %}>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="button"><i class="lucide lucide-save"></i> Atualizar</button>
+  </div>
+</form>
+{% endblock %}

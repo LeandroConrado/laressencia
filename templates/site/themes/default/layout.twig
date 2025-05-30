@@ -1,0 +1,124 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Laressência{% endblock %}</title>
+  <link rel="stylesheet" href="{{ asset('assets/site/css/style.css') }}">
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+
+      <div class="logo">
+        <a href="{{ url('home') }}">
+          <img src="{{ asset('/uploads/logo/' ~ config.logo) }}" alt="{{ config.nome_empresa }}" style="max-height: 100px; height: auto; width: auto;">
+        </a>
+      </div>
+
+      <form class="search-bar">
+        <input type="text" placeholder="busque aqui seu produto">
+        <button><i class="lucide lucide-search"></i></button>
+      </form>
+
+      <div class="header-icons">
+        <a href="#"><i data-lucide="user"></i></a>
+        <a href="#"><i data-lucide="store"></i></a>
+        <a href="#"><i data-lucide="heart"></i></a>
+        <a href="{{ url('carrinho') }}"><i data-lucide="shopping-cart"></i></a>
+      </div>
+    </div>
+  </header>
+
+  <div class="sub-header">
+    <div class="container menu-principal">
+      <a href="{{ url('home') }}">Home</a>
+      <a href="{{ url('produtos') }}">Produtos</a>
+
+      <div class="dropdown">
+        <span class="dropdown-toggle">Categorias ▾</span>
+        <div class="dropdown-menu">
+          {% for categoria in categorias_menu %}
+            <a href="{{ url('categoria' ~ categoria.id) }}">{{ categoria.nome }}</a>
+          {% else %}
+            <span class="dropdown-empty">Nenhuma categoria</span>
+          {% endfor %}
+        </div>
+      </div>
+
+      <a href="{{ url('sobre') }}">Sobre Nós</a>
+      <a href="{{ url('contato') }}">Contato</a>
+      <a href="{{ url('politicas') }}">Políticas</a>
+    </div>
+  </div>
+
+  <main class="site-main">
+    <div class="container">
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      {% include 'site/themes/default/footer.twig' %}
+      <p>&copy; {{ "now"|date("Y") }} Laressência. Todos os direitos reservados. <span style="font-size: 1.2rem;">❤️</span></p>
+    </div>
+  </footer>
+
+  <script>lucide.createIcons();</script>
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+  <script>
+    var swiper = new Swiper('.swiper-container', {
+      loop: true,
+      autoplay: {
+        delay: 4000,
+        disableOnInteraction: false,
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+    });
+
+    function aceitarCookies() {
+      localStorage.setItem('cookies_consent', 'aceito');
+      document.getElementById('cookie-banner').style.display = 'none';
+    }
+
+    function rejeitarCookies() {
+      localStorage.setItem('cookies_consent', 'recusado');
+      document.getElementById('cookie-banner').style.display = 'none';
+    }
+
+    window.addEventListener('load', function () {
+      const consent = localStorage.getItem('cookies_consent');
+      if (!consent) {
+        document.getElementById('cookie-banner').style.display = 'flex';
+      }
+    });
+  </script>
+
+  <div id="cookie-banner" class="cookie-banner">
+    <p>
+      <strong>🍪 Este site utiliza cookies - Laressência e os cookies:</strong> usamos cookies para personalizar anúncios e melhorar sua experiência no site. 
+      Você pode gerenciar suas preferências a qualquer momento nas configurações do seu navegador.
+      Ao continuar navegando, você concorda com nossa <a href="{{ url('politicas') }}" target="_blank">Política de Privacidade</a>.
+    </p>
+    <div class="cookie-buttons">
+      <button onclick="aceitarCookies()">Aceitar</button>
+      <button onclick="rejeitarCookies()" class="btn-light">Rejeitar</button>
+    </div>
+  </div>
+
+</body>
+</html>

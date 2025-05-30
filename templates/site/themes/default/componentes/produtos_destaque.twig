@@ -1,0 +1,24 @@
+<section class="produtos-destaque">
+  <div class="container">
+    <h2>produtos em destaque</h2>
+    <div class="produto-carousel">
+      {% for produto in destaques %}
+        <a href="{{ url('/produto/' ~ produto.id) }}" class="produto-card-ios">
+          {% if produto.tipo_midia == 'imagem' %}
+            <img src="{{ asset('/uploads/produtos/' ~ produto.midia) }}" alt="{{ produto.nome }}">
+          {% else %}
+            <video src="{{ asset('/uploads/produtos/' ~ produto.midia) }}" muted autoplay loop></video>
+          {% endif %}
+          <div class="produto-info">
+            <span class="patrocinado">❤️ queridinhos ❤️</span>
+            <h3>{{ produto.nome }}</h3>
+            <div class="favorito"><i class="lucide lucide-heart"></i></div>
+            <p class="product-price">R$ {{ produto.preco|number_format(2, ',', '.') }}</p>
+          </div>
+        </a>
+      {% else %}
+        <p>Nenhum produto em destaque.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,18 @@
+<div class="card-produto">
+    <a href="{{ url('/produto/' ~ produto.id) }}" class="link-produto">
+        {% if produto.tipo_midia == 'imagem' %}
+            <img src="{{ asset('/uploads/produtos/' ~ produto.midia) }}" alt="{{ produto.nome }}" class="imagem-produto">
+        {% elseif produto.tipo_midia == 'video' %}
+            <video src="{{ asset('/uploads/produtos/' ~ produto.midia) }}" class="imagem-produto" muted autoplay loop playsinline></video>
+        {% endif %}
+        
+        <div class="info">
+            {% if produto.destaque %}
+                <span class="tag-destaque">❤️ queridinhos ❤️</span>
+            {% endif %}
+            <strong class="nome">{{ produto.nome }}</strong>
+            <span class="preco">R$ {{ produto.preco|number_format(2, ',', '.') }}</span>
+        </div>
+    </a>
+</div>
+

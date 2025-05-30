@@ -1,0 +1,39 @@
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <span class="logo">Laressência</span>
+    <button id="menu-toggle" class="menu-btn">☰</button>
+  </div>
+
+   <nav>
+    <ul>
+      <li><a href="{{ base_url() }}/admin/dashboard"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
+      <li><a href="/laressencia/public/admin/produto/listar"><i data-lucide="package"></i> Produtos</a></li>
+      <li><a href="{{ base_url }}/admin/pedidos/listar"><i data-lucide="shopping-cart"></i> Pedidos</a></li>
+      <li><a href="{{ base_url }}/admin/clientes/listar"><i data-lucide="users"></i> Clientes</a></li>
+      <li><a href="{{ base_url }}/admin/categorias/listar"><i data-lucide="folder"></i> Categorias</a></li>
+      <li><a href="{{ base_url }}/admin/banners/listar"><i data-lucide="megaphone"></i> Banners</a></li>
+      <li><a href="{{ base_url }}/admin/publicidade/listar"><i data-lucide="tv"></i> Publicidades</a></li>
+      <li><a href="{{ base_url }}/admin/usuarios/listar"><i data-lucide="user-circle-2"></i> Usuários</a></li>
+      <li><a href="{{ base_url }}" target="_blank"><i data-lucide="globe"></i> Ir para o site</a></li>
+      <li><a href="{{ base_url }}/admin/configuracoes/editar"><i data-lucide="settings"></i> Configurações</a></li>
+      <li><a href="{{ base_url }}/admin/logout"><i data-lucide="log-out"></i> Sair</a></li>
+    </ul>
+  </nav>
+
+  <div class="user-box">
+    {% if app.session.usuario_foto %}
+      <img src="/laressencia/public/{{ app.session.usuario_foto }}" alt="Avatar" class="avatar-img">
+    {% else %}
+      <img src="{{ base_url }}/assets/img/avatar-default.png" alt="Avatar" class="avatar-img">
+    {% endif %}
+
+    <div class="user-info">
+      <strong>{{ app.session.usuario_nome }}</strong><br>
+      <small>{{ app.session.usuario_email }}</small>
+    </div>
+  </div>
+</aside>
+
+<script>
+  lucide.createIcons();
+</script>

@@ -1,0 +1,36 @@
+{% extends 'admin/layout/base.twig' %}
+
+{% block title %}Editar Categoria - Laressência{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1>✏️ Editar Categoria</h1>
+
+  <form action="index.php?url=categorias/atualizar&id={{ categoria.id }}" method="post" enctype="multipart/form-data" class="form">
+
+    <div class="form-group">
+      <label for="nome">Nome da Categoria:</label>
+      <input type="text" name="nome" id="nome" value="{{ categoria.nome }}" required>
+    </div>
+
+    <div class="form-group">
+      <label for="imagem">Imagem da Categoria:</label>
+      {% if categoria.imagem %}
+        <div class="imagem-preview">
+          <img src="/laressencia/public/{{ categoria.imagem }}" alt="Imagem atual" style="max-width: 200px; margin-bottom: 1rem; border-radius: 12px;">
+        </div>
+      {% endif %}
+      <input type="file" name="imagem" id="imagem" accept="image/*">
+    </div>
+
+    <div class="form-group">
+      <label class="checkbox-label">
+        <input type="checkbox" name="destaque" value="1" {% if categoria.destaque %}checked{% endif %}>
+        Exibir como destaque
+      </label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Atualizar</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,173 @@
+{% extends 'admin/layout/base.twig' %}
+
+{% block title %}📊 Visão Geral{% endblock %}
+
+{% block content %}
+<div class="container-box">
+  <h1 class="titulo-dashboard">📊 Visão Geral</h1>
+
+  <div class="dashboard-cards">
+
+     <div class="card-info">
+      <div class="card-icon">💰</div>
+      <div class="card-data">
+        <strong>R$ {{ total_vendas|number_format(2, ',', '.') }}</strong>
+        <span>Total de Vendas</span>
+      </div>
+    </div>
+
+    <div class="card-info">
+      <div class="card-icon">📦</div>
+      <div class="card-data">
+        <strong>{{ total_produtos }}</strong>
+        <span>Produtos</span>
+      </div>
+    </div>
+
+    <div class="card-info">
+      <div class="card-icon">🛒</div>
+      <div class="card-data">
+        <strong>{{ total_pedidos }}</strong>
+        <span>Pedidos</span>
+      </div>
+    </div>
+
+    <div class="card-info">
+      <div class="card-icon">👤</div>
+      <div class="card-data">
+        <strong>{{ total_usuarios }}</strong>
+        <span>Usuários</span>
+      </div>
+    </div>
+
+    <div class="card-info">
+      <div class="card-icon">📂</div>
+      <div class="card-data">
+        <strong>{{ total_categorias }}</strong>
+        <span>Categorias</span>
+      </div>
+    </div>
+
+    <div class="card-info">
+      <div class="card-icon">👁️</div>
+      <div class="card-data">
+        <strong>{{ total_visitas }}</strong>
+        <span>Visitas no Site</span>
+      </div>
+    </div>
+
+    <div class="card-info">
+      <div class="card-icon">🟢</div>
+      <div class="card-data">
+        <strong>{{ usuarios_online }}</strong>
+        <span>Usuários Online</span>
+      </div>
+    </div>
+  </div>
+
+
+<div class="card-grafico">
+  <h2>📊 Pedidos por Mês (Qtd. e Valor)</h2>
+  <canvas id="graficoPedidosMes" height="120"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('graficoPedidosMes').getContext('2d');
+  const graficoPedidos = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: {{ valores_por_mes.meses|json_encode|raw }},
+      datasets: [
+        {
+          label: 'Quantidade de Pedidos',
+          data: {{ valores_por_mes.quantidades|json_encode|raw }},
+          backgroundColor: 'rgba(54, 162, 235, 0.5)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1,
+          yAxisID: 'y1'
+        },
+        {
+          label: 'Valor Total (R$)',
+          data: {{ valores_por_mes.valores|json_encode|raw }},
+          type: 'line',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          fill: true,
+          tension: 0.3,
+          yAxisID: 'y2'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      interaction: {
+        mode: 'index',
+        intersect: false
+      },
+      stacked: false,
+      scales: {
+        y1: {
+          type: 'linear',
+          position: 'left',
+          title: {
+            display: true,
+            text: 'Quantidade'
+          },
+          beginAtZero: true
+        },
+        y2: {
+          type: 'linear',
+          position: 'right',
+          title: {
+            display: true,
+            text: 'Valor (R$)'
+          },
+          beginAtZero: true,
+          grid: {
+            drawOnChartArea: false
+          }
+        }
+      }
+    }
+  });
+</script>
+
+
+
+</div>
+
+<style>
+.dashboard-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.card-info {
+  flex: 1 1 200px;
+  background: #fff;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.card-icon {
+  font-size: 2rem;
+}
+.card-data strong {
+  font-size: 1.5rem;
+  display: block;
+}
+.card-data span {
+  color: #666;
+}
+.grafico-titulo {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+}
+</style>
+{% endblock %}

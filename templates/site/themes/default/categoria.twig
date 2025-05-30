@@ -1,0 +1,38 @@
+{# templates/site/themes/default/categoria.twig #}
+
+{% extends 'site/themes/default/layout.twig' %}
+
+{% block title %}Categoria | Laressência{% endblock %}
+
+{% block content %}
+
+<section class="destaques-section">
+  <h2 class="titulo-secao">Produtos da Categoria</h2>
+
+  <div class="destaques-grid">
+    {% for produto in produtos %}
+      <div class="card-produto">
+        <a href="{{ url('/produto/' ~ produto.id) }}">
+          <img src="{{ asset('/uploads/produtos/' ~ produto.midia) }}" alt="{{ produto.nome }}" class="imagem-produto">
+        </a>
+
+        <div class="info">
+          {% if produto.destaque %}
+            <span class="tag-destaque">patrocinado</span>
+          {% endif %}
+          <strong class="nome">{{ produto.nome }}</strong>
+          <span class="preco">R$ {{ produto.preco|number_format(2, ',', '.') }}</span>
+        </div>
+      </div>
+    {% else %}
+      <p>😕 Ops... Página não encontrada
+          A categoria que você procurou não existe ou foi movida.</p>
+    {% endfor %}
+  </div>
+
+  {# Paginação #}
+  {% if paginacao is defined %}
+    <div class="paginacao">{{ paginacao|raw }}</div>
+  {% endif %}
+</section>
+{% endblock %}

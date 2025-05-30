@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Laressência{% endblock %}</title>
+  <link rel="stylesheet" href="/laressencia/public/assets/admin/css/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head> 
+<body>
+
+<!-- DEBUG: base_url -->
+<p style="color: red; font-size: 14px;">Base URL: {{ base_url }}</p>
+<p style="color:red">base_url: {{ base_url() }}</p>
+
+  {# ALERTA #}
+  {% if session.alerta is defined %}
+    <div class="alerta {{ session.alerta.tipo }}">
+      {{ session.alerta.mensagem }}
+    </div>
+
+    <script>
+      setTimeout(() => {
+        const alerta = document.querySelector('.alerta');
+        if (alerta) {
+          alerta.style.opacity = '0';
+          setTimeout(() => alerta.remove(), 500);
+        }
+      }, 4000);
+    </script>
+  {% endif %}
+
+  <div class="layout">
+    {% include 'admin/layout/menu.twig' %}
+
+    <main class="content" id="main-content">
+      <div class="container">
+        {% block content %}{% endblock %}
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    const toggleBtn = document.getElementById('menu-toggle');
+    const sidebar = document.getElementById('sidebar');
+    const content = document.getElementById('main-content');
+
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('collapsed');
+      });
+    }
+
+    const ctx = document.getElementById('grafico-pedidos');
+    if (ctx) {
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+          datasets: [{
+            label: 'Pedidos por Mês',
+            data: [12, 18, 22, 15, 30, 25, 40, 28, 34, 27, 20, 10],
+            borderColor: '#3b82f6',
+            backgroundColor: 'rgba(59, 130, 246, 0.2)',
+            tension: 0.4,
+            pointRadius: 5,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              labels: { color: document.body.classList.contains('dark') ? '#ccc' : '#333' }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: document.body.classList.contains('dark') ? '#ccc' : '#333' }
+            },
+            y: {
+              ticks: { color: document.body.classList.contains('dark') ? '#ccc' : '#333' },
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+
+    const themeToggle = document.getElementById('toggleTheme');
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark');
+        if (document.body.classList.contains('dark')) {
+          localStorage.setItem('theme', 'dark');
+        } else {
+          localStorage.setItem('theme', 'light');
+        }
+      });
+
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark') {
+        document.body.classList.add('dark');
+      }
+    }
+
+    function atualizarContador(idInput, idContador, limite) {
+      const input = document.getElementById(idInput);
+      const contador = document.getElementById(idContador);
+
+      if (!input || !contador) return;
+
+      contador.textContent = input.value.length + '/' + limite + ' caracteres';
+
+      if (input.value.length > limite) {
+        input.style.borderColor = 'red';
+      } else {
+        input.style.borderColor = '';
+      }
+    }
+  </script>
+
+  <style>
+    .alerta {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 1rem 1.5rem;
+      border-radius: 10px;
+      color: white;
+      font-weight: bold;
+      z-index: 9999;
+      font-size: 1rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.5s ease;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .alerta.success {
+      background-color: #4caf50;
+    }
+
+    .alerta.error {
+      background-color: #e53935;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+
+</body>
+</html>

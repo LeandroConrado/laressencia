@@ -1,0 +1,15 @@
+{# Componente Contador de Caracteres #}
+
+<div class="form-group">
+  <label for="{{ id }}">{{ label }}</label>
+  <input 
+    type="text" 
+    id="{{ id }}" 
+    name="{{ name }}" 
+    maxlength="{{ limite }}" 
+    value="{{ valor|default('') }}" 
+    required 
+    oninput="atualizarContador('{{ id }}', '{{ contadorId }}', {{ limite }})"
+  >
+  <small id="{{ contadorId }}">{{ valor|length|default(0) }}/{{ limite }} caracteres</small>
+</div>

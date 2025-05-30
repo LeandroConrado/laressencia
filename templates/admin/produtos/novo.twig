@@ -1,0 +1,92 @@
+{% extends 'admin/layout/base.twig' %}
+
+{% block title %}➕ Novo Produto{% endblock %}
+
+{% block content %}
+<div class="container-box">
+  <h1>➕ Novo Produto</h1>
+
+  <form action="{{ base_url }}/admin/produto/salvar" method="POST" enctype="multipart/form-data">
+
+    <!-- 1. Identificação -->
+    <fieldset>
+      <legend>📇 Identificação</legend>
+      <div class="form-group"><label>Nome</label><input type="text" name="nome" required></div>
+      <div class="form-group"><label>SKU</label><input type="text" name="sku"></div>
+      <div class="form-group"><label>EAN</label><input type="text" name="ean"></div>
+      <div class="form-group"><label>Slug</label><input type="text" name="slug"></div>
+      <div class="form-group"><label>Palavras-chave</label><input type="text" name="palavras_chave"></div>
+      <div class="form-group"><label>Tags</label><input type="text" name="tags"></div>
+      <div class="form-group">
+        <label>Categoria</label>
+        <select name="categoria_id" required>
+          {% for categoria in categorias %}
+            <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </fieldset>
+
+    <!-- 2. Descrição -->
+    <fieldset>
+      <legend>📝 Descrição</legend>
+      <div class="form-group"><label>Descrição Curta</label><textarea name="descricao_curta" rows="2"></textarea></div>
+      <div class="form-group"><label>Descrição Longa</label><textarea name="descricao" class="tinymce"></textarea></div>
+    </fieldset>
+
+    <!-- 3. Preço -->
+    <fieldset>
+      <legend>💲 Preço</legend>
+      <div class="form-group"><label>Preço</label><input type="text" name="preco" required></div>
+      <div class="form-group"><label>Preço Promocional</label><input type="text" name="preco_promocional"></div>
+      <div class="form-group"><label>Custo</label><input type="text" name="custo"></div>
+      <div class="form-group"><label>Início Promoção</label><input type="date" name="data_inicio_promocao"></div>
+      <div class="form-group"><label>Fim Promoção</label><input type="date" name="data_fim_promocao"></div>
+    </fieldset>
+
+    <!-- 4. Estoque e Cubagem -->
+    <fieldset>
+      <legend>📦 Estoque e Cubagem</legend>
+      <div class="form-group"><label>Quantidade em Estoque</label><input type="number" name="quantidade_estoque" min="0"></div>
+      <div class="form-group"><label>Estoque Mínimo</label><input type="number" name="estoque_minimo" min="0"></div>
+      <div class="form-group"><label>Localização no Estoque</label><input type="text" name="localizacao_estoque"></div>
+      <div class="form-group"><label>Altura (cm)</label><input type="number" name="altura" step="0.01" min="0"></div>
+      <div class="form-group"><label>Largura (cm)</label><input type="number" name="largura" step="0.01" min="0"></div>
+      <div class="form-group"><label>Comprimento (cm)</label><input type="number" name="comprimento" step="0.01" min="0"></div>
+      <div class="form-group"><label>Peso (kg)</label><input type="number" name="peso" step="0.01" min="0"></div>
+    </fieldset>
+
+    <!-- 5. Flags -->
+    <fieldset>
+      <legend>⚙️ Configurações</legend>
+      {% for flag, label in {
+        'ativo': 'Ativo',
+        'exibir_home': 'Exibir na Home',
+        'produto_digital': 'Produto Digital',
+        'personalizavel': 'Personalizável',
+        'frete_gratis': 'Frete Grátis',
+        'destaque': 'Destaque'
+      } %}
+      <div class="form-group switch-group">
+        <label>{{ label }}</label>
+        <label class="switch">
+          <input type="checkbox" name="{{ flag }}" value="1">
+          <span class="slider round"></span>
+        </label>
+      </div>
+      {% endfor %}
+    </fieldset>
+
+    <!-- 6. Mídia -->
+    <fieldset>
+      <legend>📸 Mídia</legend>
+      <div class="form-group">
+        <label>Imagem ou Vídeo</label>
+        <input type="file" name="imagem" accept="image/*,video/*">
+      </div>
+    </fieldset>
+
+    <button type="submit" class="btn btn-primary">💾 Cadastrar Produto</button>
+  </form>
+</div>
+{% endblock %}

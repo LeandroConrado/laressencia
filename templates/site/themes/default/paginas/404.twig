@@ -1,0 +1,11 @@
+{% extends 'site/themes/default/layout.twig' %}
+
+{% block title %}Página não encontrada - Laressência{% endblock %}
+
+{% block content %}
+<div class="pagina-erro">
+  <h1>😕 Ops... Página não encontrada</h1>
+  <p>A página que você procurou não existe ou foi movida.</p>
+  <a href="{{ base_url }}/" class="btn-voltar">← Voltar para a Home</a>
+</div>
+{% endblock %}

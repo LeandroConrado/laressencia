@@ -1,0 +1,91 @@
+{% extends 'admin/layout/base.twig' %}
+
+{% block title %}✏️ Editar Banner{% endblock %}
+
+{% block content %}
+
+<h1 class="titulo-pagina"><i class="lucide lucide-pencil"></i> ✏️ Editar Banner</h1>
+
+<form action="index.php?url=banners/atualizar&id={{ banner.id }}" method="POST" enctype="multipart/form-data" class="formulario">
+
+  <div class="form-group">
+    <label for="titulo">Título do Banner</label>
+    <input type="text" id="titulo" name="titulo" value="{{ banner.titulo }}" required placeholder="Digite o título do banner">
+  </div>
+
+  <div class="form-group">
+    <label for="texto_botao">Texto do Botão</label>
+    <input type="text" id="texto_botao" name="texto_botao" value="{{ banner.texto_botao }}">
+  </div>
+
+  <div class="form-group">
+    <label for="url_destino">URL de Destino</label>
+    <input type="text" id="url_destino" name="url_destino" value="{{ banner.url_destino }}">
+  </div>
+
+  <div class="form-group">
+    <label for="pagina">Página de Exibição</label>
+    <select id="pagina" name="pagina">
+      <option value="home" {% if banner.pagina == 'home' %}selected{% endif %}>Home</option>
+      <option value="outra" {% if banner.pagina == 'outra' %}selected{% endif %}>Outra Página</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="ordem">Ordem de Exibição</label>
+    <input type="number" id="ordem" name="ordem" value="{{ banner.ordem }}">
+  </div>
+
+  <div class="form-group">
+    <label for="data_inicio">Data de Início</label>
+    <input type="date" id="data_inicio" name="data_inicio" value="{{ banner.data_inicio }}">
+  </div>
+
+  <div class="form-group">
+    <label for="data_fim">Data de Fim</label>
+    <input type="date" id="data_fim" name="data_fim" value="{{ banner.data_fim }}">
+  </div>
+
+  <div class="form-group">
+    <label for="cor_fundo_botao">Cor de Fundo do Botão</label>
+    <input type="color" id="cor_fundo_botao" name="cor_fundo_botao" value="{{ banner.cor_fundo_botao }}">
+  </div>
+
+  <div class="form-group">
+    <label for="cor_texto_botao">Cor do Texto do Botão</label>
+    <input type="color" id="cor_texto_botao" name="cor_texto_botao" value="{{ banner.cor_texto_botao }}">
+  </div>
+
+  <div class="form-group">
+    <label>Mídia Atual:</label>
+    {% if banner.tipo_midia == 'imagem' %}
+      <img src="/laressencia/public/uploads/banners/{{ banner.midia }}" alt="Banner Atual" style="max-width: 250px; border-radius: 10px; margin: 1rem 0;">
+    {% elseif banner.tipo_midia == 'video' %}
+      <video src="/laressencia/public/uploads/banners/{{ banner.midia }}" controls style="max-width: 250px; border-radius: 10px; margin: 1rem 0;"></video>
+    {% endif %}
+  </div>
+
+  <div class="form-group">
+    <label for="midia">Trocar Mídia (Imagem ou Vídeo)</label>
+    <input type="file" id="midia" name="midia" accept="image/*,video/mp4">
+    <small>Se enviar uma nova, substituirá a atual.</small>
+
+    <input type="hidden" name="midia_atual" value="{{ banner.midia }}">
+    <input type="hidden" name="tipo_midia_atual" value="{{ banner.tipo_midia }}">
+  </div>
+
+  <div class="form-group">
+    <label for="ativo">Ativo</label>
+    <input type="checkbox" id="ativo" name="ativo" value="1" {% if banner.ativo %}checked{% endif %}>
+    <label for="ativo" style="font-weight: normal;">Exibir banner na página selecionada</label>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="button">
+      <i class="lucide lucide-save"></i> Atualizar Banner
+    </button>
+  </div>
+
+</form>
+
+{% endblock %}

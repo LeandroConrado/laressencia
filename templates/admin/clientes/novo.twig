@@ -1,0 +1,91 @@
+{% extends 'admin/layout/base.twig' %}
+
+{% block title %}Novo Cliente - Laressência{% endblock %}
+
+{% block content %}
+<h1>👤 Novo Cliente</h1>
+
+<form action="index.php?url=clientes/salvar" method="POST" class="form-box">
+  <div class="form-group">
+    <label for="nome">Nome:</label>
+    <input type="text" name="nome" id="nome" required>
+  </div>
+
+  <div class="form-group">
+    <label for="email">E-mail:</label>
+    <input type="email" name="email" id="email">
+  </div>
+
+    <div class="form-group">
+    <label for="cpf">CPF:</label>
+    <input type="text" name="cpf" id="cpf">
+  </div>
+
+  <div class="form-group">
+    <label for="telefone">Telefone:</label>
+    <input type="text" name="telefone" id="telefone">
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label for="cidade">Cidade:</label>
+      <input type="text" name="cidade" id="cidade">
+    </div>
+
+    <div class="form-group">
+      <label for="estado">Estado:</label>
+      <input type="text" name="estado" id="estado">
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label for="cep">CEP:</label>
+      <input type="text" name="cep" id="cep">
+    </div>
+
+    <div class="form-group">
+      <label for="numero">Número:</label>
+      <input type="text" name="numero" id="numero">
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label for="bairro">Bairro:</label>
+      <input type="text" name="bairro" id="bairro">
+    </div>
+
+    <div class="form-group">
+      <label for="rua">Rua:</label>
+      <input type="text" name="rua" id="rua">
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Salvar</button>
+
+  <br><br>
+  <a href="index.php?url=clientes/listar" class="link-voltar">&larr; Voltar</a>
+</form>
+
+<script>
+  document.getElementById('cep').addEventListener('blur', function () {
+    let cep = this.value.replace(/[^0-9]/g, '');
+
+    if (cep.length === 8) {
+      fetch('https://viacep.com.br/ws/' + cep + '/json/')
+        .then(response => response.json())
+        .then(data => {
+          if (!data.erro) {
+            document.getElementById('rua').value = data.logradouro || '';
+            document.getElementById('bairro').value = data.bairro || '';
+            document.getElementById('cidade').value = data.localidade || '';
+            document.getElementById('estado').value = data.uf || '';
+          }
+        })
+        .catch(error => console.error('Erro ao consultar CEP:', error));
+    }
+  });
+</script>
+
+{% endblock %}

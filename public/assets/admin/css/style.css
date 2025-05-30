@@ -1,0 +1,552 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #f0f2f5;
+}
+
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* === Sidebar === */
+.sidebar {
+  width: 240px;
+  background: #fff;
+  padding: 1rem;
+  border-right: 1px solid #ddd;
+  transition: width 0.3s;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.04);
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.sidebar .logo {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.menu-btn {
+  font-size: 1.3rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #007aff;
+}
+
+/* Oculta textos e links ao recolher */
+.sidebar.collapsed {
+  width: 70px;
+}
+
+.sidebar.collapsed .logo,
+.sidebar.collapsed nav li a {
+  display: none;
+}
+
+/* Links do menu */
+.sidebar nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar nav li {
+  margin: 1rem 0;
+}
+
+.sidebar nav a {
+  text-decoration: none;
+  color: #007aff;
+  font-weight: 500;
+  display: block;
+  transition: color 0.2s;
+}
+
+.sidebar nav a:hover {
+  color: #005fcc;
+}
+
+/* === Conteúdo === */
+.content {
+  flex: 1;
+  padding: 1rem;
+  transition: margin-left 0.3s;
+}
+
+.content.expanded {
+  margin-left: -170px;
+}
+
+/* === Container central === */
+.container {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 16px;
+  /*box-shadow: 0 4px 12px rgba(0,0,0,0.05);*/
+  max-width: 100%; /* antes estava 800px ou 1000px */
+  margin: 2rem auto;
+}
+
+
+/* === Formulários === */
+input, textarea {
+  width: 100%;
+  padding: 0.6rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+/* === Botões === */
+button {
+  background-color: #007aff;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #005fcc;
+}
+
+/* === Tabelas === */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+table th,
+table td {
+  padding: 0.75rem;
+  border: 1px solid #e0e0e0;
+  text-align: left;
+}
+
+table th {
+  background-color: #f4f4f4;
+}
+
+/* === Responsivo === */
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .sidebar.collapsed {
+    display: none;
+  }
+
+  .container {
+    margin: 1rem;
+  }
+
+  .topbar {
+    font-size: 1rem;
+    padding: 1rem;
+  }
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  margin-right: 8px;
+  stroke: #007aff;
+  stroke-width: 1.8;
+}
+
+.sidebar nav a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.user-box {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+}
+
+.user-box img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #ccc;
+}
+
+.user-box .user-info {
+  font-size: 0.85rem;
+  color: #333;
+}
+
+/* Lucide icons */
+.icon {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+/* Estilos coloridos por tipo (exemplo) */
+.sidebar a[href*="produto"] .icon { stroke: #facc15; } /* amarelo */
+.sidebar a[href*="categoria"] .icon { stroke: #4ade80; } /* verde */
+.sidebar a[href*="usuario"] .icon { stroke: #60a5fa; } /* azul */
+.sidebar a[href*="sair"] .icon { stroke: #f87171; } /* vermelho */
+
+/* Tema escuro */
+body.dark {
+  background: #0f1117;
+  color: #e4e4e7;
+}
+
+body.dark .sidebar {
+  background: #1c1e26;
+  border-right-color: #2a2d37;
+}
+
+body.dark .sidebar nav a {
+  color: #e4e4e7;
+}
+
+body.dark .sidebar nav a:hover {
+  background: #272b36;
+}
+
+body.dark .container {
+  background: #181a20;
+  box-shadow: none;
+}
+
+body.dark .user-box .user-info,
+body.dark input,
+body.dark textarea {
+  color: #e4e4e7;
+  background: #22242d;
+  border-color: #333641;
+}
+
+/* Toggle button */
+.theme-toggle {
+  margin-top: 2rem;
+}
+
+.theme-toggle button {
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.card {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.02);
+}
+
+.card-icon {
+  font-size: 2rem;
+}
+
+.card-info strong {
+  display: block;
+  font-size: 1.5rem;
+  margin-bottom: 0.2rem;
+}
+
+.card-info span {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* Dark mode */
+body.dark .card {
+  background: #1f1f1f;
+  color: #e4e4e7;
+}
+
+body.dark .card-info span {
+  color: #aaa;
+}
+
+.grafico-box {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  margin-top: 1.5rem;
+}
+
+body.dark .grafico-box {
+  background: #1f1f1f;
+}
+
+.form-box {
+  background: #fff;
+  padding: 30px;
+  border-radius: 20px;
+
+
+  margin: 0 auto;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
+}
+
+input[type="text"],
+input[type="number"],
+select,
+textarea,
+input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  font-size: 15px;
+  background: #fafafa;
+}
+
+.btn-primary {
+  background: #007bff;
+  color: #fff;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+}
+
+.btn-primary:hover {
+  background: #005ec4;
+}
+
+.link-voltar {
+  display: inline-block;
+  margin-top: 20px;
+  color: #6c2bd9;
+  font-weight: bold;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table-responsive table {
+  width: 100%;
+  min-width: 800px; /* evita quebra de colunas em telas pequenas */
+  border-collapse: collapse;
+}
+
+
+/* .sidebar nav li:last-child {
+  border-top: 1px solid #eaeaea;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+} */
+
+/* === Avatar Redondo === */
+.avatar-img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e5e7eb; /* cinza clarinho */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease;
+}
+
+.avatar-img:hover {
+  transform: scale(1.05);
+}
+
+/* ===== TABELA DE LISTAGEM PADRÃO ADMIN ===== */
+.tabela-container {
+  overflow-x: auto;
+  margin-top: 2rem;
+}
+
+.tabela-listagem {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  overflow: hidden;
+}
+
+.tabela-listagem thead {
+  background: #f5f5f5;
+}
+
+.tabela-listagem th, 
+.tabela-listagem td {
+  padding: 1rem;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.tabela-listagem th {
+  font-weight: bold;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+}
+
+.tabela-listagem tbody tr:hover {
+  background: #f9f9f9;
+}
+
+/* ===== BOTÕES DE AÇÃO ===== */
+.btn-acao {
+  display: inline-block;
+  padding: 0.4rem 0.7rem;
+  margin: 0 0.2rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: white;
+  transition: background 0.2s;
+}
+
+.btn-acao.editar {
+  background-color: #007bff;
+}
+
+.btn-acao.editar:hover {
+  background-color: #0056b3;
+}
+
+.btn-acao.excluir {
+  background-color: #e53935;
+}
+
+.btn-acao.excluir:hover {
+  background-color: #c62828;
+}
+
+/* ===== BADGES ===== */
+.badge {
+  padding: 0.3rem 0.7rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.badge.success {
+  background-color: #4caf50;
+  color: white;
+}
+
+.badge.error {
+  background-color: #e53935;
+  color: white;
+}
+
+/* ===== HEADER FLEX (Título + botão novo) ===== */
+.header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header-flex h1 {
+  font-size: 1.6rem;
+  color: #333;
+}
+
+.header-flex a.btn {
+  font-size: 0.95rem;
+  padding: 0.7rem 1.2rem;
+}
+
+.sidebar nav ul li a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 16px;
+  color: #444; /* Texto cinza escuro */
+  text-decoration: none;
+  transition: background 0.3s, color 0.3s;
+}
+
+.sidebar nav ul li a:hover {
+  background: #f2f2f2; /* Fundo leve no hover */
+  border-radius: 8px;
+  color: #222; /* Texto ainda mais escuro no hover */
+}
+
+.sidebar nav ul li a svg {
+  color: #aaa; /* Ícones cinza claro */
+  transition: color 0.3s;
+}
+
+.sidebar nav ul li a:hover svg {
+  color: #666; /* Ícone ganha destaque no hover */
+}
+
+
+

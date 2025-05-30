@@ -1,0 +1,130 @@
+{% extends 'admin/layout/base.twig' %}
+
+{% block title %}➕ Novo Pedido - Laressência{% endblock %}
+
+{% block content %}
+<h1>➕ Novo Pedido</h1>
+
+<form action="index.php?url=pedidos/salvar" method="POST" class="form-box" onsubmit="return prepararItensPedido()">
+  <div class="form-group">
+    <label for="cliente_id">Cliente:</label>
+    <select name="cliente_id" id="cliente_id" required>
+      <option value="">Selecione...</option>
+      {% for cliente in clientes %}
+        <option value="{{ cliente.id }}">{{ cliente.nome }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="status">Status:</label>
+    <select name="status" id="status">
+      <option value="Pendente">Pendente</option>
+      <option value="Pago">Pago</option>
+      <option value="Cancelado">Cancelado</option>
+    </select>
+  </div>
+
+  <hr>
+  <h3>Itens do Pedido</h3>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label for="produto_id">Produto:</label>
+      <select id="produto_id">
+        <option value="">Selecione...</option>
+        {% for produto in produtos %}
+          <option value="{{ produto.id }}" data-preco="{{ produto.preco }}">{{ produto.nome }} - R$ {{ produto.preco|number_format(2, ',', '.') }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="quantidade">Qtd:</label>
+      <input type="number" id="quantidade" min="1" value="1">
+    </div>
+    <div class="form-group">
+      <button type="button" onclick="adicionarItem()">Adicionar</button>
+    </div>
+  </div>
+
+  <div class="tabela-box">
+    <table id="tabela-itens">
+      <thead>
+        <tr>
+          <th>Produto</th>
+          <th>Qtd</th>
+          <th>Unitário</th>
+          <th>Subtotal</th>
+          <th>Ação</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <input type="hidden" name="total" id="total">
+  <div id="itens-hidden"></div>
+
+  <br>
+  <button type="submit" class="btn btn-primary">Salvar Pedido</button>
+  <br><br>
+  <a href="index.php?url=pedidos/listar" class="link-voltar">← Voltar</a>
+</form>
+
+<script>
+  let itensPedido = [];
+
+  function adicionarItem() {
+    const select = document.getElementById('produto_id');
+    const produtoId = select.value;
+    const nome = select.options[select.selectedIndex].text;
+    const preco = parseFloat(select.options[select.selectedIndex].dataset.preco);
+    const quantidade = parseInt(document.getElementById('quantidade').value);
+
+    if (!produtoId || quantidade < 1) return;
+
+    const subtotal = preco * quantidade;
+    itensPedido.push({ produto_id: produtoId, quantidade, preco_unitario: preco });
+
+    const linha = `<tr>
+      <td>${nome}</td>
+      <td>${quantidade}</td>
+      <td>R$ ${preco.toFixed(2)}</td>
+      <td>R$ ${(subtotal).toFixed(2)}</td>
+      <td><button type="button" onclick="removerItem(this)">❌</button></td>
+    </tr>`;
+
+    document.querySelector('#tabela-itens tbody').insertAdjacentHTML('beforeend', linha);
+    document.getElementById('quantidade').value = 1;
+    calcularTotal();
+  }
+
+  function removerItem(botao) {
+    const index = botao.closest('tr').rowIndex - 1;
+    itensPedido.splice(index, 1);
+    botao.closest('tr').remove();
+    calcularTotal();
+  }
+
+  function calcularTotal() {
+    const total = itensPedido.reduce((acc, item) => acc + (item.preco_unitario * item.quantidade), 0);
+    document.getElementById('total').value = total.toFixed(2);
+  }
+
+  function prepararItensPedido() {
+    const container = document.getElementById('itens-hidden');
+    container.innerHTML = '';
+
+    itensPedido.forEach((item, i) => {
+      container.innerHTML += `
+        <input type="hidden" name="itens[${i}][produto_id]" value="${item.produto_id}">
+        <input type="hidden" name="itens[${i}][quantidade]" value="${item.quantidade}">
+        <input type="hidden" name="itens[${i}][preco_unitario]" value="${item.preco_unitario}">
+      `;
+    });
+
+    return true;
+  }
+</script>
+
+{% endblock %}

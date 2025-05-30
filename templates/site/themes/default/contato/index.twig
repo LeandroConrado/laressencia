@@ -1,0 +1,47 @@
+{% extends 'site/themes/default/layout.twig' %}
+
+{% block content %}
+<section class="container-box">
+  <h1 class="titulo">Fale Conosco</h1>
+
+  {% if mensagem_enviada %}
+    <div class="alert alert-success" style="margin-bottom: 2rem; border-radius: 8px; padding: 1rem; background: #e6ffed; color: #207141;">
+      ✅ Sua mensagem foi enviada com sucesso! Entraremos em contato em breve.
+    </div>
+  {% endif %}
+
+  <div class="row" style="display: flex; flex-wrap: wrap; gap: 2rem;">
+    <!-- COLUNA ESQUERDA: Contato e Mapa -->
+    <div class="col" style="flex: 1 1 300px;">
+      <div class="mb-4">
+        <iframe src="https://maps.google.com/maps?q=Rua%20Sebastião%20Martins%20Gomes,%20210%20-%20Manhuaçu&t=&z=15&ie=UTF8&iwloc=&output=embed" width="100%" height="220" style="border:0; border-radius: 10px;" allowfullscreen></iframe>
+      </div>
+
+      <div class="contato-info" style="font-size: 0.95rem; line-height: 1.7;">
+        <p><i data-lucide="map-pin"></i> Rua Sebastião Martins Gomes, 210 – Manhuaçu/MG</p>
+        <p><i data-lucide="phone"></i> (33) 3333-3333</p>
+        <p><i data-lucide="mail"></i> contato@laressencia.com.br</p>
+      </div>
+    </div>
+
+    <!-- COLUNA DIREITA: Formulário -->
+    <div class="col" style="flex: 1 1 300px;">
+      <form action="/enviar-contato" method="post">
+        <div class="mb-3">
+          <label>Nome</label>
+          <input type="text" name="nome" class="form-control" placeholder="Digite seu nome" required>
+        </div>
+        <div class="mb-3">
+          <label>E-mail</label>
+          <input type="email" name="email" class="form-control" placeholder="Digite seu e-mail" required>
+        </div>
+        <div class="mb-3">
+          <label>Mensagem</label>
+          <textarea name="mensagem" rows="5" class="form-control" placeholder="Digite sua mensagem" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Enviar Mensagem</button>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

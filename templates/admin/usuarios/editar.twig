@@ -1,0 +1,51 @@
+{% extends 'admin/layout/base.twig' %}
+
+{% block title %}✏️ Editar Usuário - Laressência{% endblock %}
+
+{% block content %}
+<h1>✏️ Editar Usuário</h1>
+
+<form action="index.php?url=usuarios/atualizar&id={{ usuario.id }}" method="POST" enctype="multipart/form-data" class="form-box">
+
+  <div class="form-group">
+    <label for="nome">Nome:</label>
+    <input type="text" name="nome" id="nome" value="{{ usuario.nome }}" required>
+  </div>
+
+  <div class="form-group">
+    <label for="email">Email:</label>
+    <input type="email" name="email" id="email" value="{{ usuario.email }}" required>
+  </div>
+
+  <div class="form-group">
+    <label for="senha">Nova senha (opcional):</label>
+    <input type="password" name="senha" id="senha">
+  </div>
+
+  <div class="form-group">
+    <label>Foto atual:</label><br>
+    {% if usuario.foto %}
+      <img src="/laressencia/public/{{ usuario.foto }}" width="60" class="avatar-img">
+    {% else %}
+      —
+    {% endif %}
+  </div>
+
+  <div class="form-group">
+    <label for="foto">Alterar foto:</label>
+    <input type="file" name="foto" id="foto" accept="image/*">
+  </div>
+
+  <input type="hidden" name="foto_atual" value="{{ usuario.foto }}">
+
+  <div class="form-group">
+    <label>
+      <input type="checkbox" name="ativo" {% if usuario.ativo %}checked{% endif %}> Ativo
+    </label>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+  <br><br>
+  <a href="index.php?url=usuarios/listar" class="link-voltar">← Voltar</a>
+</form>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% if banners|length > 0 %}
+<section class="swiper-container">
+  <div class="swiper-wrapper">
+    {% for banner in banners %}
+      <div class="swiper-slide">
+        {% if banner.tipo_midia == 'video' %}
+          {% if banner.midia ends with '.mp4' %}
+            <video src="{{ asset('uploads/banners/' ~ banner.midia) }}" autoplay loop muted playsinline class="banner-media"></video>
+          {% else %}
+            <iframe class="banner-media" src="https://www.youtube.com/embed/{{ banner.midia }}?autoplay=1&mute=1&loop=1&playlist={{ banner.midia }}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          {% endif %}
+        {% else %}
+          <img src="{{ asset('uploads/banners/' ~ banner.midia) }}" alt="{{ banner.titulo }}" class="banner-media">
+        {% endif %}
+        {% if banner.titulo or banner.url_destino %}
+          <div class="banner-info">
+            {% if banner.titulo %}
+              <p class="banner-descricao">{{ banner.titulo }}</p>
+            {% endif %}
+            {% if banner.url_destino %}
+              <a href="{{ url}}" class="botao-banner" target="_blank">Saiba mais</a>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="swiper-pagination"></div>
+  <div class="swiper-button-prev"></div>
+  <div class="swiper-button-next"></div>
+</section>
+{% endif %}

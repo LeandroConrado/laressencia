@@ -1,0 +1,106 @@
+{% extends 'admin/layout/base.twig' %}
+
+{% block title %}✏️ Editar Produto{% endblock %}
+
+{% block content %}
+<div class="container-box">
+  <h1>✏️ Editar Produto</h1>
+
+  <form action="{{ base_url }}/admin/produto/atualizar/{{ produto.id }}" method="POST" enctype="multipart/form-data">
+
+    <!-- 1. Identificação -->
+    <fieldset>
+      <legend>📇 Identificação</legend>
+      <div class="form-group"><label>Nome</label><input type="text" name="nome" value="{{ produto.nome }}"></div>
+      <div class="form-group"><label>SKU</label><input type="text" name="sku" value="{{ produto.sku }}"></div>
+      <div class="form-group"><label>EAN</label><input type="text" name="ean" value="{{ produto.ean }}"></div>
+      <div class="form-group"><label>Slug</label><input type="text" name="slug" value="{{ produto.slug }}"></div>
+      <div class="form-group"><label>Palavras-chave</label><input type="text" name="palavras_chave" value="{{ produto.palavras_chave }}"></div>
+      <div class="form-group"><label>Tags</label><input type="text" name="tags" value="{{ produto.tags }}"></div>
+      <div class="form-group">
+        <label>Categoria</label>
+        <select name="categoria_id" required>
+          {% for categoria in categorias %}
+            <option value="{{ categoria.id }}" {% if categoria.id == produto.categoria_id %}selected{% endif %}>
+              {{ categoria.nome }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+    </fieldset>
+
+    <!-- 2. Descrição -->
+    <fieldset>
+      <legend>📝 Descrição</legend>
+      <div class="form-group"><label>Descrição Curta</label><textarea name="descricao_curta" rows="2">{{ produto.descricao_curta }}</textarea></div>
+      <div class="form-group"><label>Descrição Longa</label><textarea name="descricao" class="tinymce">{{ produto.descricao }}</textarea></div>
+    </fieldset>
+
+    <!-- 3. Preço -->
+    <fieldset>
+      <legend>💲 Preço</legend>
+      <div class="form-group"><label>Preço</label><input type="text" name="preco" value="{{ produto.preco }}"></div>
+      <div class="form-group"><label>Preço Promocional</label><input type="text" name="preco_promocional" value="{{ produto.preco_promocional }}"></div>
+      <div class="form-group"><label>Custo</label><input type="text" name="custo" value="{{ produto.custo }}"></div>
+      <div class="form-group"><label>Início Promoção</label><input type="date" name="data_inicio_promocao" value="{{ produto.data_inicio_promocao }}"></div>
+      <div class="form-group"><label>Fim Promoção</label><input type="date" name="data_fim_promocao" value="{{ produto.data_fim_promocao }}"></div>
+    </fieldset>
+
+    <!-- 4. Estoque e Cubagem -->
+    <fieldset>
+      <legend>📦 Estoque e Cubagem</legend>
+      <div class="form-group"><label>Estoque</label><input type="number" name="quantidade_estoque" value="{{ produto.quantidade_estoque }}"></div>
+      <div class="form-group"><label>Estoque Mínimo</label><input type="number" name="estoque_minimo" value="{{ produto.estoque_minimo }}"></div>
+      <div class="form-group"><label>Localização</label><input type="text" name="localizacao_estoque" value="{{ produto.localizacao_estoque }}"></div>
+      <div class="form-group"><label>Altura (cm)</label><input type="number" name="altura" step="0.01" value="{{ produto.altura }}"></div>
+      <div class="form-group"><label>Largura (cm)</label><input type="number" name="largura" step="0.01" value="{{ produto.largura }}"></div>
+      <div class="form-group"><label>Comprimento (cm)</label><input type="number" name="comprimento" step="0.01" value="{{ produto.comprimento }}"></div>
+      <div class="form-group"><label>Peso (kg)</label><input type="number" name="peso" step="0.01" value="{{ produto.peso }}"></div>
+    </fieldset>
+
+    <!-- 5. Flags -->
+    <fieldset>
+      <legend>⚙️ Configurações</legend>
+      {% for flag, label in {
+        'ativo': 'Ativo',
+        'exibir_home': 'Exibir na Home',
+        'produto_digital': 'Produto Digital',
+        'personalizavel': 'Personalizável',
+        'frete_gratis': 'Frete Grátis',
+        'destaque': 'Destaque'
+      } %}
+      <div class="form-group switch-group">
+        <label>{{ label }}</label>
+        <label class="switch">
+          <input type="checkbox" name="{{ flag }}" value="1" {% if attribute(produto, flag) %}checked{% endif %}>
+          <span class="slider round"></span>
+        </label>
+      </div>
+      {% endfor %}
+    </fieldset>
+
+    <!-- 6. Mídia -->
+    <fieldset>
+      <legend>📸 Mídia</legend>
+      <input type="hidden" name="midia_atual" value="{{ produto.midia }}">
+      <input type="hidden" name="tipo_midia_atual" value="{{ produto.tipo_midia }}">
+
+      <div class="form-group">
+        <label>Mídia Atual</label><br>
+        {% if produto.tipo_midia == 'imagem' %}
+          <img src="/laressencia/public/uploads/produtos/{{ produto.midia }}" width="150">
+        {% else %}
+          <video src="/laressencia/public/uploads/produtos/{{ produto.midia }}" width="150" controls></video>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label>Alterar Mídia</label>
+        <input type="file" name="imagem" accept="image/*,video/*">
+      </div>
+    </fieldset>
+
+    <button type="submit" class="btn btn-primary">💾 Atualizar Produto</button>
+  </form>
+</div>
+{% endblock %}

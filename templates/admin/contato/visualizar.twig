@@ -1,0 +1,13 @@
+{% extends 'admin/layout/base.twig' %}
+
+{% block conteudo %}
+<h1>👁 Visualizar Mensagem</h1>
+
+<p><strong>Nome:</strong> {{ mensagem.nome }}</p>
+<p><strong>E-mail:</strong> {{ mensagem.email }}</p>
+<p><strong>Assunto:</strong> {{ mensagem.assunto }}</p>
+<p><strong>Data de Envio:</strong> {{ mensagem.data_envio|date("d/m/Y H:i") }}</p>
+<p><strong>Mensagem:</strong><br>{{ mensagem.mensagem|nl2br }}</p>
+
+<a href="{{ base_url() }}/admin/contato/listar" class="btn">⬅ Voltar</a>
+{% endblock %}

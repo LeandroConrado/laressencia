@@ -1,0 +1,11 @@
+{% extends 'site/themes/default/layout.twig' %}
+
+{% block title %}{{ produto.nome }} | Laressência{% endblock %}
+
+{% block content %}
+<section class="produto-single">
+  <div class="container">
+    {% include 'site/themes/default/componentes/produto_detalhe.twig' with { 'produto': produto } %}
+  </div>
+</section>
+{% endblock %}

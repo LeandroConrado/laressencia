@@ -1,0 +1,28 @@
+<form action="index.php?url=configuracoes/salvar" method="POST" enctype="multipart/form-data" class="form-box grid grid-cols-1 md:grid-cols-2 gap-4">
+  {% for config in configs %}
+    <div class="form-group col-span-1">
+      <label for="{{ config.chave }}" class="font-semibold">
+        {{ config.chave|replace({'_': ' '})|capitalize }}
+      </label>
+
+      {% if config.chave == 'logo' %}
+        {% if config.valor %}
+          <div style="margin: 10px 0;">
+            <img src="/laressencia/public/uploads/logo/{{ config.valor }}" alt="Logo atual" style="max-height: 60px;">
+          </div>  
+        {% endif %}
+        <input type="file" name="{{ config.chave }}" id="{{ config.chave }}">
+      {% elseif config.chave starts with 'banner' %}
+        <input type="text" name="{{ config.chave }}" id="{{ config.chave }}" value="{{ config.valor }}" placeholder="URL ou nome do arquivo">
+      {% elseif config.valor is iterable %}
+        <textarea name="{{ config.chave }}" id="{{ config.chave }}" rows="3">{{ config.valor }}</textarea>
+      {% else %}
+        <input type="text" name="{{ config.chave }}" id="{{ config.chave }}" value="{{ config.valor }}">
+      {% endif %}
+    </div>
+  {% endfor %}
+
+  <div class="col-span-full text-right">
+    <button type="submit" class="btn btn-primary">💾 Salvar Configurações</button>
+  </div>
+</form>
